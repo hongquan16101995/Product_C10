@@ -1,10 +1,27 @@
 package com.example.product.model;
 
+import javax.persistence.*;
+
+@Entity
+//annotation đánh dấu đây là 1 thực thể trong dự án
+//kết nối ORM để tạo bảng => khóa chính
 public class Product {
+    @Id
+    //đánh dấu khóa chính
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String name;
+
+    @Column( columnDefinition = "double default 10.0")
     private Double price;
     private Integer quantity;
+
+    //@ManyToOne
+    //@ManyToMany
+    //FetchType
+    //Cascade
 
     public Product() {
     }
