@@ -2,6 +2,8 @@ package com.example.product.service;
 
 import com.example.product.model.Product;
 
-public interface IProductService extends ICoreService<Product> {
+import java.util.List;
 
+public interface IProductService extends ICoreService<Product> {
+    List<Product> findName(Double price, Double price1);
 }

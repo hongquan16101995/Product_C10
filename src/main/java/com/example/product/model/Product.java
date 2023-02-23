@@ -5,6 +5,8 @@ import javax.persistence.*;
 @Entity
 //annotation đánh dấu đây là 1 thực thể trong dự án
 //kết nối ORM để tạo bảng => khóa chính
+@NamedQuery(name = "findAll", query = "SELECT p FROM Product AS p")
+//annotation dùng để tạo câu query và đặt tên cho nó, nhằm tái sử dụng nhiều lần
 public class Product {
     @Id
     //đánh dấu khóa chính

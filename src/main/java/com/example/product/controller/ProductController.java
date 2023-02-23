@@ -1,11 +1,13 @@
 package com.example.product.controller;
 
 import com.example.product.model.Product;
+import com.example.product.repository.IProductRepository;
 import com.example.product.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -21,6 +23,15 @@ public class ProductController {
         List<Product> products = productService.findAll();
         model.addAttribute("product", products);
         return "list";
+    }
+
+    @GetMapping("/search")
+    public ModelAndView findName(@RequestParam("price") Double price,
+                                 @RequestParam("price1") Double price1) {
+        List<Product> products = productService.findName(price, price1);
+        ModelAndView a = new ModelAndView("list");
+        a.addObject("product", products);
+        return a;
     }
 
     @GetMapping("/create")

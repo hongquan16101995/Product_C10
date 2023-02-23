@@ -8,55 +8,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Component
+@Transactional
 public class ProductRepository {
-    @Autowired
-    private SessionFactory sessionFactory;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     public List<Product> findAll() {
-//        entityManager = sessionFactory.createEntityManager();
-        String query = "SELECT p FROM Product AS p";
-        TypedQuery<Product> strQuery = entityManager.createQuery(query, Product.class);
+        TypedQuery<Product> strQuery = entityManager.createNamedQuery("findAll", Product.class);
         return strQuery.getResultList();
     }
 
     public Product findById(Long id) {
-        String query = "SELECT p FROM Product AS p WHERE p.id = :id";
-        TypedQuery<Product> strQuery = entityManager.createQuery(query, Product.class);
-        strQuery.setParameter("id", id);
-        return strQuery.getSingleResult();
+        return entityManager.find(Product.class, id);
     }
 
     public void create(Product product) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.persist(product);
-        transaction.commit();
-        session.close();
+        entityManager.persist(product);
     }
 
     public void update(Product product) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.merge(product);
-        transaction.commit();
-        session.close();
+        entityManager.merge(product);
     }
 
 
     public void delete(Long id) {
-        Product product = findById(id);
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.remove(product);
-        transaction.commit();
-        session.close();
+        entityManager.remove(findById(id));
     }
 }
