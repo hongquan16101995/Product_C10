@@ -21,7 +21,7 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public List<Product> findAll() {
-        return (List<Product>) iProductRepository.findAll();
+        return iProductRepository.findAll();
     }
 
     @Override
@@ -45,7 +45,12 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public List<Product> findName(Double price, Double price1) {
+    public List<Product> findByPrice(Double price, Double price1) {
         return iProductRepository.findAllByPriceBetween(price, price1);
+    }
+
+    @Override
+    public List<Product> findByName(String name) {
+        return iProductRepository.findByName("%" + name + "%");
     }
 }

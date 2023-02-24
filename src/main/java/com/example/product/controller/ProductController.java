@@ -1,7 +1,9 @@
 package com.example.product.controller;
 
+import com.example.product.model.Category;
 import com.example.product.model.Product;
 import com.example.product.repository.IProductRepository;
+import com.example.product.service.ICategoryService;
 import com.example.product.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +18,15 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    IProductService productService;
+    private IProductService productService;
+
+    @Autowired
+    private ICategoryService categoryService;
+
+    @ModelAttribute("categories")
+    private List<Category> getCategories() {
+        return categoryService.findAll();
+    }
 
     @GetMapping
     public String findAll(Model model) {
@@ -25,10 +35,18 @@ public class ProductController {
         return "list";
     }
 
-    @GetMapping("/search")
-    public ModelAndView findName(@RequestParam("price") Double price,
+    @GetMapping("/price")
+    public ModelAndView findByPrice(@RequestParam("price") Double price,
                                  @RequestParam("price1") Double price1) {
-        List<Product> products = productService.findName(price, price1);
+        List<Product> products = productService.findByPrice(price, price1);
+        ModelAndView a = new ModelAndView("list");
+        a.addObject("product", products);
+        return a;
+    }
+
+    @GetMapping("/search")
+    public ModelAndView findByName(@RequestParam("name") String name) {
+        List<Product> products = productService.findByName(name);
         ModelAndView a = new ModelAndView("list");
         a.addObject("product", products);
         return a;
@@ -51,7 +69,7 @@ public class ProductController {
                              @PathVariable Long id) {
         Product product = productService.findById(id);
         model.addAttribute("product", product);
-        return "update";
+        return "create";
     }
 
     @PostMapping("/update/{id}")
@@ -63,6 +81,12 @@ public class ProductController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         productService.delete(id);
+        return "redirect:/products";
+    }
+
+    @GetMapping("/category/delete/{id}")
+    public String deleteCategory(@PathVariable Long id) {
+        categoryService.delete(id);
         return "redirect:/products";
     }
 }

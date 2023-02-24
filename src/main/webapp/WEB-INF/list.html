@@ -13,6 +13,7 @@
         <th>Name</th>
         <th>Price</th>
         <th>Quantity</th>
+        <th>Category</th>
         <th colspan="2">Action</th>
     </tr>
     <tr th:each="p : ${product}">
@@ -20,8 +21,23 @@
         <td th:text="${p.name}"></td>
         <td th:text="${p.price}"></td>
         <td th:text="${p.quantity}"></td>
+        <td th:text="${p.category.name}"></td>
         <td><button><a th:href="@{/products/update/{id}(id=${p.id})}">Update</a></button></td>
         <td><button><a th:href="@{/products/delete/__${p.id}__}">Delete</a></button></td>
+    </tr>
+</table>
+
+<h1>List category</h1>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th colspan="2">Action</th>
+    </tr>
+    <tr th:each="c : ${categories}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.name}"></td>
+        <td><button><a th:href="@{/products/category/delete/__${c.id}__}">Delete</a></button></td>
     </tr>
 </table>
 </body>

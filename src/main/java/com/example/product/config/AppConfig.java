@@ -1,5 +1,9 @@
 package com.example.product.config;
 
+import com.example.product.formatter.CategoryFormatter;
+import com.example.product.formatter.ProductFormatter;
+import com.example.product.service.ICategoryService;
+import com.example.product.service.IProductService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -8,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -117,5 +122,12 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
         return properties;
+    }
+
+    //    formatter
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new ProductFormatter(applicationContext.getBean(IProductService.class)));
+        registry.addFormatter(new CategoryFormatter(applicationContext.getBean(ICategoryService.class)));
     }
 }

@@ -14,26 +14,19 @@ public class Product {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    //annotation hỗ trợ chỉnh sửa thông tin field DB, thêm constrain
     private String name;
 
     @Column( columnDefinition = "double default 10.0")
     private Double price;
     private Integer quantity;
 
-    //@ManyToOne
+    //@ManyToOne: tạo liên kết nhiều - một, nhiều cho entity chứa annotation, 1 cho thuộc tính đánh dấu
     //@ManyToMany
     //FetchType
     //Cascade
-
-    public Product() {
-    }
-
-    public Product(Long id, String name, Double price, Integer quantity) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-    }
+    @ManyToOne(targetEntity = Category.class)
+    private Category category;
 
     public Long getId() {
         return id;
@@ -65,5 +58,13 @@ public class Product {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
