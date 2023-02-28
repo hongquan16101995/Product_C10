@@ -1,6 +1,10 @@
 package com.example.product.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 //annotation đánh dấu đây là 1 thực thể trong dự án
@@ -14,10 +18,14 @@ public class Product {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @Size(min = 3, max = 10)
     //annotation hỗ trợ chỉnh sửa thông tin field DB, thêm constrain
     private String name;
 
     @Column( columnDefinition = "double default 10.0")
+    @NotNull
+    @Min(value = 10000)
+    @Max(value = 1000000)
     private Double price;
     private Integer quantity;
 

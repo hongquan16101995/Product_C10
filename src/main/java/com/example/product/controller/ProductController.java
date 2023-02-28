@@ -8,9 +8,13 @@ import com.example.product.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+import java.util.InputMismatchException;
 import java.util.List;
 
 @Controller
@@ -59,7 +63,13 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Product product) {
+    public String create(@Valid @ModelAttribute Product product,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirect) throws InputMismatchException{
+        if (bindingResult.hasErrors()) {
+            redirect.addFlashAttribute("product", product);
+            return "/create";
+        }
         productService.create(product);
         return "redirect:/products";
     }
@@ -73,7 +83,13 @@ public class ProductController {
     }
 
     @PostMapping("/update/{id}")
-    public String update(@ModelAttribute Product product) {
+    public String update(@Valid @ModelAttribute Product product,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirect) {
+        if (bindingResult.hasErrors()) {
+            redirect.addFlashAttribute("product", product);
+            return "/create";
+        }
         productService.update(product);
         return "redirect:/products";
     }
@@ -88,5 +104,10 @@ public class ProductController {
     public String deleteCategory(@PathVariable Long id) {
         categoryService.delete(id);
         return "redirect:/products";
+    }
+
+    @ExceptionHandler({InputMismatchException.class, Exception.class})
+    public ModelAndView pageFail() {
+        return new ModelAndView("error");
     }
 }

@@ -7,6 +7,7 @@ import com.example.product.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public void create(Product product) {
+    public void create(Product product) throws InputMismatchException {
         iProductRepository.save(product);
     }
 

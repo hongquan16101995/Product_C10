@@ -9,7 +9,9 @@
 <form th:object="${product}" method="post">
     <label>ID: <input type="text" th:field="*{id}"></label><br>
     <label>Name: <input type="text" th:field="*{name}"></label><br>
+    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
     <label>Price: <input type="text" th:field="*{price}"></label><br>
+    <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
     <label>Quantity: <input type="text" th:field="*{quantity}"></label><br>
     <label>Category: <select th:field="*{category}">
         <option th:each="c : ${categories}" th:text="${c.name}" th:value="${c.id}"></option>
